@@ -235,6 +235,7 @@ app.get('/getDetailsForPendingRequest', async (req, res) => {
   const username = req.query.name;
   data = await PendingModel.find({ 'username': username });
 
+
   if (data.length === 0) {
     res.send("No new Requests");
   } else {
@@ -260,9 +261,9 @@ app.get('/getDetailsForPendingRequest', async (req, res) => {
 
 });
 
-app.get('/getStatus',async(req,res)=>{
+app.get('/getStatus', async (req, res) => {
   let id = req.query.id;
-  id =await PendingModel.findById(id);
+  id = await PendingModel.findById(id);
 
   res.json(id);
 })
@@ -273,9 +274,12 @@ app.get('/getDetailsForApprovalOrDenail', async (req, res) => {
   const promises = [];
 
   users.forEach(async (user) => {
-    const id = user._id;
-    const user2Promise = TravelModel.findById(id);
-    promises.push(user2Promise);
+    if (user.status !== "true") {
+      console.log("0");
+      const id = user._id;
+      const user2Promise = TravelModel.findById(id);
+      promises.push(user2Promise);
+    }
   });
 
   const user2Results = await Promise.all(promises);
@@ -316,6 +320,23 @@ app.get('/getDetailsForApprovalOrDenail', async (req, res) => {
   res.send(jsonData);
 });
 
+
+app.get('/getApproved', (req, res) => {
+  const name = req.query.name;
+
+  const data = PendingModel.findOne({ username: name }).then((data) => {
+    data.status = "true";
+
+    const save = new PendingModel(data);
+
+    save.save().then(() => {
+      res.send("Data Saved");
+    }).catch((err) => {
+      res.send("Error");
+    })
+  });
+
+})
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

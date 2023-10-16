@@ -160,6 +160,36 @@
             }
         });
 
+        function getApproved() {
+            const username = sessionStorage.getItem('SARUsername');
+
+            $.ajax({
+                url: `/getApproved?name=${username}`,
+                method: 'GET',
+                success: (approvedData) => {
+                    if (approvedData == "Data Saved") {
+
+                        $('#resultTable2 tr').each(function () {
+                            var row = $(this);
+                            var valueToMatch = row.find('td:first').text();
+
+                            if (valueToMatch === sessionStorage.getItem('SARUsername')) {
+                                row.remove();
+                            }
+                        });
+                        alert("Request Approved");
+                    }
+                    else {
+                        alert("Error with Database")
+                    }
+                }
+            });
+        }
+
+        function getDeclined() {
+            console.log("Decline");
+        }
+
         $.ajax({
             url: `/getDetailsForApprovalOrDenail?name=${username}`,
             method: 'GET',
@@ -176,6 +206,9 @@
                         $("#alert2").show();
                     }
 
+                    sessionStorage.removeItem("SARUsername");
+                    sessionStorage.setItem("SARUsername", item.username);
+
                     const dateTime = new Date(item.dateTime);
                     const formattedDate = `${dateTime.getHours()}:${dateTime.getMinutes()} ${dateTime.getDate()}/${dateTime.getMonth() + 1}/${dateTime.getFullYear()}`;
                     resultBody2.append(`
@@ -184,11 +217,11 @@
                                     <td>${item.modeOfTransport}</td>
                                     <td>${formattedDate}</td>
                                     <td>
-                                        <button class="btn btn-success">Approve</button>
-                                        <button class="btn btn-danger">Decline</button>
-                                        </td>
+                                        <button class="btn btn-success" onclick="getApproved()">Approve</button>
+                                        <button class="btn btn-danger" onclick="getDeclined()">Decline</button>
+                                    </td>
                                     </tr>
-                        `);
+                                    `);
                 }
                 else {
                     $("#resultTable2").hide();
