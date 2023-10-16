@@ -204,8 +204,6 @@ app.get('/submitRequest', async (req, res) => {
   const username = req.query.name;
   const id = req.query.id;
 
-  console.log(username + " " + id);
-
   const requestData = new RequestModel({ username, id, status: "false" });
   await requestData.save().then(savedAccept => {
   })
@@ -329,26 +327,52 @@ app.get('/getDetailsForApprovalOrDenail', async (req, res) => {
 });
 
 
-app.get('/getApproved', (req, res) => {
-  const name = req.query.name;
+app.get('/getApproved', async (req, res) => {
+  try {
+    const name = req.query.name;
+    const datas = await PendingModel.find({ username: name });
 
-  const data = PendingModel.find({ username: name }).then((datas) => {
-    datas.forEach((data) => {
-
-      if(data.status === "true")
-      return;
+    for (const data of datas) {
+      if (data.status === "true") {
+        continue;
+      }
 
       data.status = "true";
       const save = new PendingModel(data);
-      save.save().then(() => {
-        res.send("Data Saved");
-      }).catch((err) => {
-        res.send("Error");
-      })
-    })
-  });
+      await save.save();
+    }
 
-})
+    res.send("Data Saved");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
+app.get('/getDeclined', async (req, res) => {
+  try {
+    const name = req.query.name;
+
+    const datas = await PendingModel.find({ username: name });
+
+    for (const data of datas) {
+      if (data.status === "true") {
+        continue;
+      }
+
+      data.status = "declined";
+      const save = new PendingModel(data);
+      await save.save();
+    }
+
+    res.send("Data Saved");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

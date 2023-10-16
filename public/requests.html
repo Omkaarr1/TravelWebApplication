@@ -17,11 +17,15 @@
         }
 
         #status {
-            background-color: rgb(251, 176, 176);
+            background-color: rgb(147, 142, 142);
         }
 
         #status2 {
             background-color: rgb(164, 247, 159);
+        }
+
+        #status3 {
+            background-color: rgb(247, 159, 159);
         }
 
         #reload {
@@ -100,6 +104,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
     <script>
+        let tableUsernames;
+
         function getHome() {
             window.location.href = '/getHome'
         }
@@ -130,18 +136,10 @@
                             data = JSON.parse(data)
 
                             const dateTime = new Date(item.dateTime);
+                            console.log(data.status);
                             const formattedDate = `${dateTime.getHours()}:${dateTime.getMinutes()} ${dateTime.getDate()}/${dateTime.getMonth() + 1}/${dateTime.getFullYear()}`;
 
-                            if (data.status != "true")
-                                resultBody.append(`
-                                    <tr>
-                                    <td>${item.username}</td>
-                                    <td>${item.modeOfTransport}</td>
-                                    <td>${formattedDate}</td>
-                                    <td id="status">Pending</td>
-                                    </tr>
-                        `)
-                            else
+                            if (data.status == "true")
                                 resultBody.append(`
                                     <tr>
                                     <td>${item.username}</td>
@@ -149,7 +147,26 @@
                                     <td>${formattedDate}</td>
                                     <td id="status2">Approved</td>
                                     </tr>
+                        `)
+                            else if (data.status == "declined")
+                                resultBody.append(`
+                                    <tr>
+                                    <td>${item.username}</td>
+                                    <td>${item.modeOfTransport}</td>
+                                    <td>${formattedDate}</td>
+                                    <td id="status3">Declined</td>
+                                    </tr>
                         `);
+                            else {
+                                resultBody.append(`
+                                    <tr>
+                                    <td>${item.username}</td>
+                                    <td>${item.modeOfTransport}</td>
+                                    <td>${formattedDate}</td>
+                                    <td id="status">Pending</td>
+                                    </tr>
+                        `);
+                            }
 
                         });
                     });
@@ -162,6 +179,8 @@
 
         function getApproved() {
             const username = sessionStorage.getItem('SARUsername');
+
+
 
             $.ajax({
                 url: `/getApproved?name=${username}`,
@@ -187,7 +206,29 @@
         }
 
         function getDeclined() {
-            console.log("Decline");
+            const username = sessionStorage.getItem('SARUsername');
+
+            $.ajax({
+                url: `/getDeclined?name=${username}`,
+                method: 'GET',
+                success: (approvedData) => {
+                    if (approvedData == "Data Saved") {
+
+                        $('#resultTable2 tr').each(function () {
+                            var row = $(this);
+                            var valueToMatch = row.find('td:first').text();
+
+                            if (valueToMatch === sessionStorage.getItem('SARUsername')) {
+                                row.remove();
+                            }
+                        });
+                        alert("Request Declined Kindly Refresh Twice!");
+                    }
+                    else {
+                        alert("Error with Database")
+                    }
+                }
+            });
         }
 
         $.ajax({
