@@ -326,7 +326,6 @@ app.get('/getDetailsForApprovalOrDenail', async (req, res) => {
   }
 });
 
-
 app.get('/getApproved', async (req, res) => {
   try {
     const name = req.query.name;
@@ -348,7 +347,6 @@ app.get('/getApproved', async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
-
 
 app.get('/getDeclined', async (req, res) => {
   try {
@@ -372,7 +370,6 @@ app.get('/getDeclined', async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
-
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
