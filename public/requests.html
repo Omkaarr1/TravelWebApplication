@@ -177,7 +177,7 @@
                                 row.remove();
                             }
                         });
-                        alert("Request Approved");
+                        alert("Request Approved Kindly Refresh Twice!");
                     }
                     else {
                         alert("Error with Database")
@@ -194,7 +194,7 @@
             url: `/getDetailsForApprovalOrDenail?name=${username}`,
             method: 'GET',
             success: (data) => {
-                // console.log(data)
+                console.log(data)
 
                 if (data != "No new Approval/Denial Requests") {
 

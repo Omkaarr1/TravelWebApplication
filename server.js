@@ -275,7 +275,6 @@ app.get('/getDetailsForApprovalOrDenail', async (req, res) => {
 
   users.forEach(async (user) => {
     if (user.status !== "true") {
-      console.log("0");
       const id = user._id;
       const user2Promise = TravelModel.findById(id);
       promises.push(user2Promise);
@@ -306,33 +305,46 @@ app.get('/getDetailsForApprovalOrDenail', async (req, res) => {
 
       // Write the JSON data to the file, overwriting any previous content
       fs.writeFileSync(filePath, user2, 'utf-8');
+
     }
   });
 
   const filePath = 'data.json';
 
   // Read the JSON data from the file
-  const jsonData = fs.readFileSync(filePath, 'utf-8');
+  if (fs.existsSync(filePath)) {
+    const jsonData = fs.readFileSync(filePath, 'utf-8');
 
-  // Parse the JSON string into a JavaScript object
-  const data = JSON.parse(jsonData);
-
-  res.send(jsonData);
+    if (Object.keys(jsonData).length > 0) {
+      res.send(jsonData);
+      fs.unlinkSync(filePath);
+    } else {
+      // JSON data is empty
+      res.send("No new Approval/Denial Requests");
+    }
+  } else {
+    // JSON data is empty
+    res.send("No new Approval/Denial Requests");
+  }
 });
 
 
 app.get('/getApproved', (req, res) => {
   const name = req.query.name;
 
-  const data = PendingModel.findOne({ username: name }).then((data) => {
-    data.status = "true";
+  const data = PendingModel.find({ username: name }).then((datas) => {
+    datas.forEach((data) => {
 
-    const save = new PendingModel(data);
+      if(data.status === "true")
+      return;
 
-    save.save().then(() => {
-      res.send("Data Saved");
-    }).catch((err) => {
-      res.send("Error");
+      data.status = "true";
+      const save = new PendingModel(data);
+      save.save().then(() => {
+        res.send("Data Saved");
+      }).catch((err) => {
+        res.send("Error");
+      })
     })
   });
 
