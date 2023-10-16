@@ -115,7 +115,7 @@ The project structure is organized as follows:
    - Immerse yourself in an interactive 3D environment while using TravelAgent.
 
 ## Contribution
-   - Backend, ThreeJs : [Omkar]()https://github.com/Omkaarr1
+   - Backend, ThreeJs : [Omkar](https://github.com/Omkaarr1)
    - Frontend : [Aaditya Raj](https://github.com/aadi-69)
 
 We welcome and appreciate contributions to enhance TravelAgent. Feel free to fork the project, create pull requests, and report issues. Please review our [Contributing Guidelines](CONTRIBUTING.md) for more details.
