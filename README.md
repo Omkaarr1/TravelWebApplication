@@ -10,8 +10,7 @@ Welcome to TravelAgent, a web application designed to make your travel planning 
 - [Getting Started](#getting-started)
 - [Project Structure](#project-structure)
 - [How to Use](#how-to-use)
-- [Contributing](#contributing)
-- [License](#license)
+- [Contribution](#contribution)
 
 ## Features
 
@@ -115,7 +114,9 @@ The project structure is organized as follows:
 6. **Enjoy the ThreeJs Experience:**
    - Immerse yourself in an interactive 3D environment while using TravelAgent.
 
-## Contributing
+## Contributon
+   - Backend, ThreeJs : [Omkar]()https://github.com/Omkaarr1
+   - Frontend : [Aaditya Raj](https://github.com/aadi-69)
 
 We welcome and appreciate contributions to enhance TravelAgent. Feel free to fork the project, create pull requests, and report issues. Please review our [Contributing Guidelines](CONTRIBUTING.md) for more details.
 
