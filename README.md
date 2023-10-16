@@ -114,7 +114,7 @@ The project structure is organized as follows:
 6. **Enjoy the ThreeJs Experience:**
    - Immerse yourself in an interactive 3D environment while using TravelAgent.
 
-## Contributon
+## Contribution
    - Backend, ThreeJs : [Omkar]()https://github.com/Omkaarr1
    - Frontend : [Aaditya Raj](https://github.com/aadi-69)
 
